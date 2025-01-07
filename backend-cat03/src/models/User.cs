@@ -2,17 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace backend_cat03.src.models
 {
-    public class User
+    public class User : IdentityUser
     {
-        public int Id { get; set; }
-
-        public string Email { get; set; } = string.Empty;
-
         public string Password { get; set; } = string.Empty;
 
-        public List<Post> Posts { get; set; } = []; 
+        public List<Post> Posts { get; set; } = new List<Post>(); 
     }
 }
