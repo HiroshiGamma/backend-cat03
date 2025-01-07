@@ -32,16 +32,16 @@ namespace backend_cat03.src.repository
         }
 
 
-        public async Task<NewUserDto> LoginAsync(UserDto userDto)
+        public async Task<NewUserDto> LoginAsync(LoginRegisterDto LoginRegisterDto)
         {
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == userDto.Email);
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == LoginRegisterDto.Email);
 
             if (user == null)
             {
                 throw new UnauthorizedAccessException("Invalid email or password");
             }   
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, userDto.Password, false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, LoginRegisterDto.Password, false);
 
             if(!result.Succeeded)
             {
@@ -55,19 +55,14 @@ namespace backend_cat03.src.repository
             };
         }
 
-        public Task<NewUserDto> Register(UserDto userDto)
+        public async Task<NewUserDto> RegisterAsync(LoginRegisterDto LoginRegisterDto)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<NewUserDto> RegisterAsync(UserDto userDto)
-        {
-            if (string.IsNullOrEmpty(userDto.Password))
+            if (string.IsNullOrEmpty(LoginRegisterDto.Password))
             {
                 throw new ArgumentException("Password is required");
             }
 
-            var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
+            var existingUser = await _userManager.FindByEmailAsync(LoginRegisterDto.Email);
             if (existingUser != null)
             {
                 throw new InvalidOperationException("Email is already in use");
@@ -75,19 +70,30 @@ namespace backend_cat03.src.repository
 
             var user = new User
             {
-                Email = userDto.Email
+                Email = LoginRegisterDto.Email,
+                UserName = LoginRegisterDto.Email 
             };
 
-            var createUser = await _userManager.CreateAsync(user, userDto.Password);
+            var createUser = await _userManager.CreateAsync(user, LoginRegisterDto.Password);
 
             if (!createUser.Succeeded)
             {
                 throw new InvalidOperationException(string.Join(";", createUser.Errors.Select(x => x.Description)));
-            }
+            }   
+
+            var roleResult = await _userManager.AddToRoleAsync(user, "User");
+
+            if(!roleResult.Succeeded)
+            {
+                throw new InvalidOperationException(string.Join(";", roleResult.Errors.Select(x => x.Description)));
+            }   
+
+            var roles = await _userManager.GetRolesAsync(user);
 
             return new NewUserDto
             {
                 Email = user.Email,
+                Role = roles.First(),
                 Token = await _tokenService.CreateToken(user)
             };
         }

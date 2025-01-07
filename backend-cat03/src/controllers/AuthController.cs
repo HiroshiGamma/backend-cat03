@@ -23,7 +23,7 @@ namespace backend_cat03.src.controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserDto userDto)
+        public async Task<IActionResult> Register([FromBody] LoginRegisterDto LoginRegisterDto)
         {
 
             try
@@ -33,7 +33,7 @@ namespace backend_cat03.src.controllers
                     return BadRequest(ModelState);
                 }
 
-                var newUser = await _authRepository.RegisterAsync(userDto);
+                var newUser = await _authRepository.RegisterAsync(LoginRegisterDto);
                 return Ok(newUser);
             }
             catch(Exception ex)
@@ -44,7 +44,7 @@ namespace backend_cat03.src.controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserDto  userDto)
+        public async Task<IActionResult> Login(LoginRegisterDto  LoginRegisterDto)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace backend_cat03.src.controllers
                     return BadRequest(ModelState);
                 }
 
-                var newUser = await _authRepository.LoginAsync(userDto);
+                var newUser = await _authRepository.LoginAsync(LoginRegisterDto);
                 return Ok(newUser);
             }
             catch(Exception ex)

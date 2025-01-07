@@ -14,6 +14,9 @@ namespace backend_cat03.src.dtos
         public string Email {get; set; } = null!;
 
         [Required]
+        public string Role {get; set; } = null!;
+
+        [Required]
         public string Token {get; set; } = null!;
     }
 }

@@ -11,8 +11,8 @@ using backend_cat03.src.data;
 namespace backend_cat03.src.data.migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250107143155_add identity")]
-    partial class addidentity
+    [Migration("20250107151642_token")]
+    partial class token
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -217,10 +217,6 @@ namespace backend_cat03.src.data.migrations
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")

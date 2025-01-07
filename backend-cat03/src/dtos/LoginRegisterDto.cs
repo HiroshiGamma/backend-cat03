@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 
 namespace backend_cat03.src.dtos
 {
-    public class UserDto
+    public class LoginRegisterDto
     {
         [Required]
         [EmailAddress]

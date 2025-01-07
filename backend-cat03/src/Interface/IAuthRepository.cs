@@ -9,7 +9,7 @@ namespace backend_cat03.src.Interface
 {
     public interface IAuthRepository
     {
-        Task<NewUserDto> RegisterAsync(UserDto userDto);
-        Task<NewUserDto> LoginAsync(UserDto userDto);
+        Task<NewUserDto> RegisterAsync(LoginRegisterDto LoginRegisterDto);
+        Task<NewUserDto> LoginAsync(LoginRegisterDto LoginRegisterDto);
     }
 }

@@ -23,37 +23,37 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-builder.Services.AddIdentity<User, IdentityRole>(
-    opt => {
-        opt.Password.RequireDigit = true;
-        opt.Password.RequireLowercase = false;
-        opt.Password.RequireUppercase = false;
-        opt.Password.RequireNonAlphanumeric = false;
-        opt.Password.RequiredLength = 7;
-    }
-).AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<User, IdentityRole>(options => 
+    {
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequiredLength = 8;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddAuthentication(
-    opt => 
+    options =>
     {
-        opt.DefaultAuthenticateScheme =
-        opt.DefaultChallengeScheme =
-        opt.DefaultForbidScheme = 
-        opt.DefaultScheme =
-        opt.DefaultSignInScheme =
-        opt.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
-    }).AddJwtBearer(options => {
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidateAudience = true,
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SigningKey"] ?? throw new ArgumentNullException("Jwt:SigningKey"))),
-        RoleClaimType = ClaimTypes.Role 
-    };
-});
+        options.DefaultAuthenticateScheme = 
+        options.DefaultChallengeScheme = 
+        options.DefaultForbidScheme =
+        options.DefaultScheme = 
+        options.DefaultSignInScheme = 
+        options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer(option => {
+        option.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["JWT:Audience"],
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"] ?? "")),
+            RoleClaimType = ClaimTypes.Role
+        };
+    });
 
 
 builder.Services.AddSwaggerGen(option =>
