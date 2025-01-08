@@ -11,9 +11,25 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Security.Claims;
+using CloudinaryDotNet;
 
 var builder = WebApplication.CreateBuilder(args);
 Env.Load();
+
+var cloudName = Environment.GetEnvironmentVariable("CloudinaryName");
+var apiKey = Environment.GetEnvironmentVariable("ApiKey");
+var apiSecret = Environment.GetEnvironmentVariable("ApiSecret");
+
+
+if (cloudName == null || apiKey == null || apiSecret == null)
+{
+    throw new Exception("Cloudinary settings not found in environment variables.");
+}
+
+var cloudinaryAccount = new Account(cloudName, apiKey, apiSecret);
+var cloudinary = new Cloudinary(cloudinaryAccount);
+
+builder.Services.AddSingleton(cloudinary);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -22,6 +38,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options => 
     {

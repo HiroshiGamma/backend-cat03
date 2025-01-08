@@ -12,6 +12,7 @@ using backend_cat03.src.services;
 using backend_cat03.src.dtos;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 
 namespace backend_cat03.src.repository
 {
@@ -48,9 +49,13 @@ namespace backend_cat03.src.repository
                 throw new UnauthorizedAccessException("Invalid email or password");
             }
 
+            var roles = await _userManager.GetRolesAsync(user);
+
+
             return new NewUserDto  
             {
                 Email = user.Email!,
+                Role = roles.First(),
                 Token = await _tokenService.CreateToken(user)
             };
         }
