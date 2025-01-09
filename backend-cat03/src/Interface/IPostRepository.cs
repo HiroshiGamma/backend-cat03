@@ -9,5 +9,7 @@ namespace backend_cat03.src.Interface
     public interface IPostRepository
     {
         Task<List<Post>> GetAll();
+
+        Task<Post> CreatePost(Post post, IFormFile? image);
     }
 }

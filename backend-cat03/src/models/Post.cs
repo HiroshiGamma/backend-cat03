@@ -12,11 +12,10 @@ namespace backend_cat03.src.models
 
         public string Title { get; set; } = string.Empty;
 
-        public DateTime Date { get; set; } 
-
+        public string Date { get; set; } = string.Empty;
         public string ImageUrl { get; set; } = string.Empty;
 
-        public int UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
         public User User { get; set; } = null!; 
     }
