@@ -90,8 +90,16 @@ namespace backend_cat03.src.repository
                 throw new Exception("User identifier claim is not available");
             }
 
+            var userEmailClaim = httpContext.User.FindFirst(ClaimTypes.Email);
+            if (userEmailClaim == null)
+            {
+                throw new Exception("User email claim is not available");
+            }
+
             var userId = userIdClaim.Value;
+            var userEmail = userEmailClaim.Value;
             post.UserId = userId;
+            post.UserEmail = userEmail;
 
             await _context.Posts.AddAsync(post);
             await _context.SaveChangesAsync();
@@ -104,9 +112,5 @@ namespace backend_cat03.src.repository
             return await _context.Posts.AnyAsync(p => p.Title == title); 
         }
 
-        public Task CreatePost(object post)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
