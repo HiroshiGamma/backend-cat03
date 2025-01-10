@@ -118,7 +118,9 @@ builder.Services.AddCors(options =>
  
 
 var app = builder.Build();
-app.UseCors("AllowedSpecificOrigin");
+
+
+app.UseCors("AllowSpecificOrigin");
 
 if (app.Environment.IsDevelopment())
 {
